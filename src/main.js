@@ -1,12 +1,9 @@
 const Apify = require('apify');
 const latinize = require('latinize');
 
-// Apify.utils contains various utilities, e.g. for logging.
-// Here we turn off the logging of unimportant messages.
 const { log } = Apify.utils;
-log.setLevel(log.LEVELS.WARNING);
 const sourceUrl = 'https://www.gov.pl/web/koronawirus/wykaz-zarazen-koronawirusem-sars-cov-2';
-// Apify.main() function wraps the crawler logic (it is optional).
+
 Apify.main(async () => {
     const requestQueue = await Apify.openRequestQueue();
     const kvStore = await Apify.openKeyValueStore('COVID-19-POLAND');
