@@ -56,6 +56,7 @@ Apify.main(async () => {
             delete actual.lastUpdatedAtApify;
 
             if(JSON.stringify(latest)!== JSON.stringify(actual)){
+                log.info('Data did change :( storing new to dataset.')
                 await dataset.pushData(data);
             }
 
