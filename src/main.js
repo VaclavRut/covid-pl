@@ -10,6 +10,8 @@ const sourceUrl = 'https://www.gov.pl/web/koronawirus/wykaz-zarazen-koronawiruse
 Apify.main(async () => {
     const requestQueue = await Apify.openRequestQueue();
     const kvStore = await Apify.openKeyValueStore('COVID-19-POLAND');
+    const dataset = await Apify.openDataset("COVID-19-POLAND-HISTORY");
+
     await requestQueue.addRequest({ url: sourceUrl });
     const crawler = new Apify.CheerioCrawler({
         requestQueue,
@@ -46,7 +48,7 @@ Apify.main(async () => {
             };
 
             await kvStore.setValue('LATEST', data);
-            await Apify.pushData(data);
+            await dataset.pushData(data);
         },
 
         // This function is called if the page processing failed more than maxRequestRetries+1 times.
