@@ -15,11 +15,15 @@ Apify.main(async () => {
     await requestQueue.addRequest({ url: sourceUrl });
     const crawler = new Apify.CheerioCrawler({
         requestQueue,
+        useApifyProxy: true,
+        apifyProxyGroups: ['CZECH_LUMINATI'],
         handlePageTimeoutSecs: 60 * 2,
         handlePageFunction: async ({ $ }) => {
+            log.info('Page loaded.');
             const now = new Date();
             const rawData = JSON.parse(latinize($('pre#registerData').text().trim()));
             const countryData = JSON.parse(rawData.parsedData);
+            log.info(`${countryData.length} of regions loaded.`)
             const infectedByRegion = [];
             let infectedCountTotal = 0;
             let deceasedCountTotal = 0;
@@ -49,6 +53,7 @@ Apify.main(async () => {
 
             await kvStore.setValue('LATEST', data);
             await dataset.pushData(data);
+            log.info('Data stored, finished.')
         },
 
         // This function is called if the page processing failed more than maxRequestRetries+1 times.
