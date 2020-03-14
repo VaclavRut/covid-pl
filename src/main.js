@@ -3,6 +3,7 @@ const latinize = require('latinize');
 
 const { log } = Apify.utils;
 const sourceUrl = 'https://www.gov.pl/web/koronawirus/wykaz-zarazen-koronawirusem-sars-cov-2';
+const LATEST = "LATEST";
 
 Apify.main(async () => {
     const requestQueue = await Apify.openRequestQueue();
@@ -48,8 +49,17 @@ Apify.main(async () => {
                 readMe: 'https://apify.com/vaclavrut/covid-pl',
             };
 
-            await kvStore.setValue('LATEST', data);
-            await dataset.pushData(data);
+            // Compare and save to history
+            const latest = await kvStore.getValue(LATEST);
+            delete latest.lastUpdatedAtApify;
+            const actual = Object.assign({}, data);
+            delete actual.lastUpdatedAtApify;
+
+            if(JSON.stringify(latest)!== JSON.stringify(actual)){
+                await dataset.pushData(data);
+            }
+
+            await kvStore.setValue(LATEST, data);
             log.info('Data stored, finished.')
         },
 
