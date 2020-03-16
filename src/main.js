@@ -62,6 +62,9 @@ Apify.main(async () => {
 
             await kvStore.setValue(LATEST, data);
             log.info('Data stored, finished.')
+
+            // to have lovely public runs...
+            await Apify.pushData(data);
         },
 
         // This function is called if the page processing failed more than maxRequestRetries+1 times.
