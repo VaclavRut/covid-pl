@@ -9,7 +9,7 @@
       "type": "string",
       "description": "Email where we should send email if there are no data about regions, which means something is wrong.",
       "prefill": "example@example.com",
-      "editor": "textarea"
+      "editor": "textfield"
     }
   },
   "required": ["email"]
